@@ -869,11 +869,9 @@
             overflow-wrap: break-word;
             white-space: normal;
             cursor: default;
-        }
-
-        .tile.clickable {
-            cursor: pointer;
             pointer-events: auto;
+        }
+            cursor: pointer;
         }
 
         .tile.clickable:hover {
@@ -936,7 +934,7 @@
             max-width: 14%;
             max-height: 14%;
             z-index: 100;
-            transition: all 5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            transition: all 2s cubic-bezier(0.45, 0.05, 0.55, 0.95);
             filter: drop-shadow(0 8px 6px rgba(0,0,0,0.45));
             pointer-events: none;
             top: 0;
@@ -3056,7 +3054,7 @@
             card4Answered: false
         };
         
-        const TRAVEL_DURATION = 5000; // 5 seconds untuk perjalanan (agar musik bisa dimainkan)
+        const TRAVEL_DURATION = 2000; // 2 seconds untuk perjalanan (agar musik bisa dimainkan)
         const DEFAULT_PREVIEW_IMAGE = 'https://raw.githubusercontent.com/AYAA-lab/resonance-odyssey/0e31389538a02c42684025cbc04d8fb04add8b76/JAKARTA.png';
 
         let audioContext = null;
@@ -3303,6 +3301,7 @@
             const defaultImage = 'https://raw.githubusercontent.com/AYAA-lab/resonance-odyssey/0e31389538a02c42684025cbc04d8fb04add8b76/JAKARTA.png';
             
             cityData.forEach((city, i) => {
+                if (i === 0) return;
                 
                     const tile = document.createElement('div');
                     tile.className = `tile ${city.side === 'corner' ? 'corner-tile' : city.side}`;
@@ -3319,8 +3318,8 @@
         }
 
         function getNextTileIndex() {
-            if (!state.active || state.isMoving) return null;
-            return (state.idx + 1) % cityData.length;
+            if (!state.active || state.isMoving || state.idx >= cityData.length - 1) return null;
+            return state.idx + 1;
         }
 
         function updateBoardInteraction() {
@@ -3343,8 +3342,8 @@
         const gameBoard = document.getElementById('board');
         if (gameBoard) {
             gameBoard.addEventListener('click', (event) => {
-                const tile = event.target.closest('.tile');
-                if (!tile || !tile.classList.contains('clickable')) return;
+                const tile = event.target.closest('.tile.clickable');
+                if (!tile) return;
 
                 const tileIndex = Number(tile.dataset.index);
                 const nextIndex = getNextTileIndex();
