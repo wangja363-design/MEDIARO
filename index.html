@@ -875,6 +875,7 @@
         .tile.clickable {
             cursor: pointer;
             pointer-events: auto;
+            z-index: 10;
         }
 
         .tile.clickable:hover {
@@ -3312,12 +3313,24 @@
                     tile.dataset.index = i;
                     tile.style.gridRow = gridCoords[i][0];
                     tile.style.gridColumn = gridCoords[i][1];
+                    tile.style.pointerEvents = 'auto';
                     let inner = `<span style="z-index: 10;">${city.name}</span>`;
 
                     // Set background image - use city.image if available, otherwise use default JAKARTA.png
                     const imageUrl = city.image || defaultImage;
                     tile.style.backgroundImage = `url('${imageUrl}')`;
                     tile.innerHTML = inner;
+
+                    tile.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        if (!state.active || state.isMoving || !tile.classList.contains('clickable')) return;
+                        const tileIndex = Number(tile.dataset.index);
+                        const nextIndex = getNextTileIndex();
+                        if (nextIndex !== null && tileIndex === nextIndex) {
+                            moveToNextTile();
+                        }
+                    });
+
                     board.appendChild(tile);
             });
         }
