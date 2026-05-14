@@ -878,6 +878,10 @@
             z-index: 10;
         }
 
+        .tile.clickable {
+            cursor: pointer;
+        }
+
         .tile.clickable:hover {
             transform: translateY(-3px);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 6px 15px rgba(126, 200, 227, 0.4);
@@ -3722,7 +3726,24 @@
 
         function showAreaPreview() {
             state.autoPaused = true;
-            openAdventureOverlay();
+            const city = cityData[state.idx];
+            const previewOverlay = document.getElementById('area-preview-overlay');
+            const previewImage = document.getElementById('preview-image');
+            const previewTitle = document.getElementById('preview-title');
+            const previewAction = document.getElementById('preview-action');
+
+            if (previewImage) {
+                previewImage.src = city.image || DEFAULT_PREVIEW_IMAGE;
+            }
+            if (previewTitle) {
+                previewTitle.innerText = `Sampai di ${city.name}`;
+            }
+            if (previewAction) {
+                previewAction.innerText = 'MASUK KE SOAL';
+            }
+
+            previewOverlay.classList.remove('hidden');
+            previewOverlay.classList.add('show');
         }
 
         function showRegionNotification() {
