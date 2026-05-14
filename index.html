@@ -871,7 +871,10 @@
             cursor: default;
             pointer-events: auto;
         }
+
+        .tile.clickable {
             cursor: pointer;
+            pointer-events: auto;
         }
 
         .tile.clickable:hover {
@@ -3312,6 +3315,8 @@
                     let inner = `<span style="z-index: 10;">${city.name}</span>`;
 
                     // Set background image - use city.image if available, otherwise use default JAKARTA.png
+                    const imageUrl = city.image || defaultImage;
+                    tile.style.backgroundImage = `url('${imageUrl}')`;
                     tile.innerHTML = inner;
                     board.appendChild(tile);
             });
